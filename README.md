@@ -3,7 +3,7 @@ An easy-to-use YouTube API, without any kind of quota, and download any videos o
 I'm still working on it, so stay tuned for more updates to come.
 
 ## Documentation
-https://yotube-scraping-api.readthedocs.io
+https://youtube-scraping-api.readthedocs.io
 
 ## Version
 
