@@ -1,0 +1,4 @@
+sphinxawesome_theme
+requests
+bs4
+tqdm

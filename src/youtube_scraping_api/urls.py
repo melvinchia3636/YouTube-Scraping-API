@@ -1,0 +1,10 @@
+BASE_URL = "https://www.youtube.com"
+SEARCH_BASE_URL = "https://www.youtube.com/results?search_query="
+SEARCH_CONTINUATION_URL = "https://www.youtube.com/youtubei/v1/search?key="
+PLAYLIST_BASE_URL = "https://www.youtube.com/playlist?list="
+PLAYLIST_CONTINUTION_URL = "https://www.youtube.com/youtubei/v1/browse?key="
+CHANNEL_USERNAME_URL = "https://www.youtube.com/user/"
+CHANNEL_ID_URL = "https://www.youtube.com/channel/"
+VIDEO_PLAYER_URL = "https://www.youtube.com/watch?v="
+COMMENT_AJAX_URL = 'https://www.youtube.com/comment_service_ajax'
+QUERY_SUGGESTIONS_URL = 'https://suggestqueries-clients6.youtube.com/complete/search'
