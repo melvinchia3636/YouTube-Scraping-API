@@ -94,7 +94,8 @@ class LiveStream:
             self.author = Channel(
                 name = data["ownerText"]["runs"][0]["text"],
                 url = data["ownerText"]["runs"][0]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"],
-                channel_id = data["ownerText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"]
+                channel_id = data["ownerText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"],
+            builtin_called = True
             )
             self.thumbnail = getThumbnail(data["videoId"])
 
@@ -295,7 +296,8 @@ RENDERER_PARSER = {
         author=Channel(
             name = x["ownerText"]["runs"][0]["text"],
             url = x["ownerText"]["runs"][0]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"],
-            channel_id = x["ownerText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"]
+            channel_id = x["ownerText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"],
+            builtin_called = True
         ),
         builtin_called=True
     ),
@@ -307,7 +309,8 @@ RENDERER_PARSER = {
         author=Channel(
             name = x["ownerText"]["runs"][0]["text"],
             url = x["ownerText"]["runs"][0]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"],
-            channel_id = x["ownerText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"]
+            channel_id = x["ownerText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"],
+            builtin_called = True
         ),
         builtin_called=True
     ),
@@ -317,7 +320,8 @@ RENDERER_PARSER = {
         name = x["title"]["simpleText"],
         video_count = int(x["videoCountText"]["runs"][0]["text"].split()[0].replace(",", "")) if "videoCountText" in x else None,
         subscriber_count = (int(d) if (d:=x["subscriberCountText"]["simpleText"].split()[0]).isdigit() else d) if "subscriberCountText" in x else None,
-        avatar = x["thumbnail"]["thumbnails"]
+        avatar = x["thumbnail"]["thumbnails"],
+        builtin_called = True
     ),
     "playlistRenderer": Playlist,
     "horizontalCardListRenderer": HorizontalCardList,
@@ -338,7 +342,8 @@ RENDERER_PARSER = {
         author = Channel(
             name = x["longBylineText"]["runs"][0]["text"],
             url = x["longBylineText"]["runs"][0]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"],
-            channel_id = x["longBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"]
+            channel_id = x["longBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"],
+            builtin_called = True
         ),
         builtin_called=True
     ),

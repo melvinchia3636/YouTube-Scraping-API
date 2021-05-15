@@ -26,16 +26,6 @@ class Channel:
     def __repr__(self):
         return f'<Channel id="{self.id}" name="{self.name}">'
 
-    def __getattr__(self, attr: str):
-        try:
-            if self._is_builtin_callled and attr in self._static_properties:
-                return self._static_properties[attr]
-            if not self.has_generated:
-                self.parseData()
-            return self.__dict__[attr]
-        except (KeyError, ValueError, AttributeError):
-            raise AttributeError(f'Attribute {attr} not exist')
-
     def parseData(self):
         """Fetch HTML source code and extract JSON data from it
         

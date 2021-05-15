@@ -37,7 +37,7 @@ Tired of searching on YouTube webpage? Or you just wanna try to be cool? We have
 
 The output of these two lines of codse should be something like:
 
-.. code-block::
+.. code-block:: powershell
 
 	<SearchResult {'Playlist': 3, 'Video': 16, 'Channel': 1, 'Shelf': 1}>
 

@@ -1,14 +1,14 @@
 PAYLOAD = {
-        "context": {
-            "client": {
-                "clientName": "WEB",
-                "clientVersion": "2.20201220.08.00",
-            },
-            "user": {
-                "lockedSafetyMode": False,
-            }
+    "context": {
+        "client": {
+            "clientName": "WEB",
+            "clientVersion": "2.20201220.08.00",
+        },
+        "user": {
+            "lockedSafetyMode": False,
         }
     }
+}
 
 HEADERS = {
     "x-youtube-client-name": "1",

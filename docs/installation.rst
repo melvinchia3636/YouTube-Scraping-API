@@ -14,7 +14,7 @@ distribution:
 
 Source
 ------
-If for some reason you dont hate using PyPI, you may also install using git.
+If for some reason you hate using PyPI to install packages, you may also install using git.
 
 .. code-block:: powershell
 
@@ -22,4 +22,4 @@ If for some reason you dont hate using PyPI, you may also install using git.
 
 .. warning::
     
-    If you download the code directly from GitHub, sometimes you might find some experimental or code after installing it. For those who are facing any problems when running the code, kindly drop your issue in the Issue page of the respository.
+    If you download the code directly from GitHub, sometimes you might find some experimental features after installing it. For those who are facing any problems when running the code, kindly drop your issue in the Issue page of the repository.

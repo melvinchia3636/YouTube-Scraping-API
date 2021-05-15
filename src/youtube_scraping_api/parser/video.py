@@ -31,20 +31,10 @@ class Video():
         self.id = videoId
         self.thumbnails = getThumbnail(self.id)
 
-        self.static_properties = kwargs
+        self._static_properties = kwargs
 
     def __repr__(self):
         return f'<Video id="{self.id}" title="{self.title}" author="{self.author.name}">'
-
-    def __getattr__(self, attr: str):
-        try:
-            if self._is_builtin_callled and attr in self.static_properties:
-                return self.static_properties[attr]
-            if not self.has_generated:
-                self.parseData()
-            return self.__dict__[attr]
-        except (KeyError, ValueError, AttributeError):
-            raise AttributeError(f'Attribute {attr} not exist')
 
     def parseData(self) -> None:
         """Fetch HTML source code and extract JSON data from it
