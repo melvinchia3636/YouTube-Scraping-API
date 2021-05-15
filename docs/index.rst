@@ -54,7 +54,7 @@ Features
 * Welly documented source code
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 9999
    :caption: Contents:
 
    installation

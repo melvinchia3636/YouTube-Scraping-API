@@ -12,6 +12,8 @@
 #
 import os
 import sys
+from pygments.token import (Comment, Error, Generic, Name, Number, Operator,
+                            String, Text, Whitespace, Keyword)
 sys.path.insert(0, os.path.abspath('../src'))
 
 
@@ -57,6 +59,7 @@ autosummary_generate = True
 templates_path = ['_templates']
 html_static_path = ['_static']
 html_css_files = ["mod.css"]
+html_js_files = ['jquery.visible.min.js']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -71,3 +74,83 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 #
 html_theme = "sphinxawesome_theme"
 html_domain_indices = True
+
+import pygments.styles, pygments.token
+def monkeypatch_pygments(name, base_name='default', attrs={}):
+    import importlib, sys
+    base_module = importlib.import_module('.'.join(['pygments', 'styles', base_name]))
+
+    def name_to_class_name(name):
+        return name.replace('_', ' ').title().replace(' ', '') + 'Style'
+    base_class = getattr(base_module, name_to_class_name(base_name))
+    styles = getattr(base_class, 'styles', {}).copy()
+    styles.update(attrs.pop('styles', {}))
+    attrs['styles'] = styles
+    class_name = name_to_class_name(name)
+    Style = type(class_name, (base_class,), attrs)
+    module = type(base_module)(name)
+    setattr(module, class_name, Style)
+    setattr(pygments.styles, name, module)
+    pygments.styles.STYLE_MAP[name] = f'{name}::{class_name}'
+    sys.modules['.'.join(['pygments', 'styles', name])] = module
+
+BLUE_LIGHT = '#0080ff'
+BLUE = '#2c5dcd'
+GREEN = '#65B315'
+GREEN_LIGHT = '#65B315'
+GREEN_NEON = '#65B315'
+GREY = '#aaaaaa'
+GREY_LIGHT = '#cbcbcb'
+GREY_DARK = '#4d4d4d'
+PURPLE = '#9682FA'
+RED = '#cc0000'
+RED_DARK = '#FC6A7E'
+RED_LIGHT = '#ffcccc'
+RED_BRIGHT = '#ff0000'
+WHITE = '#ffffff'
+TURQUOISE = '#318495'
+ORANGE = '#ff8000'  
+
+pygments_style = 'custom'  # Arbitrary name of new style
+monkeypatch_pygments(
+    pygments_style,
+    'rainbow_dash',  # Name of base style to use
+    {
+        'styles': {
+            Comment: 'italic #A9AEB9',
+            Comment.Preproc: 'noitalic',
+            Comment.Special: 'bold',
+
+            Error: '#FC0000',
+
+            Keyword: '#E0A800',
+            Keyword.Pseudo: 'nobold',
+            Keyword.Type: PURPLE,
+
+            Name.Attribute: 'italic {}'.format(BLUE),
+            Name.Builtin: PURPLE,
+            Name.Class: 'underline',
+            Name.Constant: TURQUOISE,
+            Name.Decorator: PURPLE,
+            Name.Entity: 'bold {}'.format(PURPLE),
+            Name.Exception: PURPLE,
+            Name.Function: '#00B0D4',
+            Name.Tag: 'bold {}'.format(BLUE),
+
+            Number: '#ED7940',
+
+            Operator: '#868D9C',
+            Operator.Word: '',
+
+            String: GREEN,
+            String.Doc: 'italic #A9AEB9',
+            String.Escape: RED_DARK,
+            String.Other: TURQUOISE,
+            String.Symbol: RED_DARK,
+
+            Text: GREY_DARK,
+
+            Whitespace: GREY_LIGHT
+        }
+    }
+)

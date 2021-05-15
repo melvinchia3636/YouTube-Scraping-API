@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Montserrat&display=swap');
 
+@font-face {
+    font-family: Hermit;
+    src: url("./Hermit-Light.otf") format("opentype");
+}
+
 body {
 	font-family: 'Poppins' !important;
 }
@@ -74,6 +79,29 @@ nav {
 .admonition-title {
 	font-family: 'Poppins' !important;
 	font-size: 1rem
+}
+
+code {
+	font-family: 'Hermit' !important;
+}
+
+input:focus, input:active {
+	background: white !important;
+	outline: none
+}
+
+#searchbox button {
+	display: inherit;
+	background: white;
+	color: rgba(26,32,44,var(--tw-bg-opacity))
+}
+
+nav[aria-label="breadcrumbs"] {
+	margin-top: 2rem
+}
+
+a[aria-label="Back to homepage"]:hover {
+	background: none
 }
 
 @media (max-width: 768px) {
