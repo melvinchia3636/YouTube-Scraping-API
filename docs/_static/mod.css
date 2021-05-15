@@ -59,10 +59,6 @@ nav {
 	padding-top: 2rem !important
 }
 
-.sig-object {
-	font-family: Consolas, Monaco
-}
-
 .simple em {
 	font-style: normal
 }
@@ -81,8 +77,12 @@ nav {
 	font-size: 1rem
 }
 
-code {
+code, .sig-object {
 	font-family: 'Hermit' !important;
+}
+
+.sig-param {
+	font-style: normal
 }
 
 input:focus, input:active {

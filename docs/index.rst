@@ -43,15 +43,17 @@ Of course these are just a tip of the iceberg. We have a lot more features avail
 
 Features
 --------
-* Ability to scrape YouTube search results
+* Scrape YouTube search results
+* Scrape YouTube suggestion queries
 * Useful filters for YouTube searching
 * Download videos with any resolutions
 * Get metadata of channels, videos, and playlists
 * Scrape thumbnail urls of videos, channels, and playlists
 * Scrape captions of videos
 * Ability to log progress when executing code
-* Nicely formed data structure
+* Nicely formed object structure
 * Welly documented source code
+* You can literally create a fully working YouTube clone with this API :)
 
 .. toctree::
    :maxdepth: 9999
