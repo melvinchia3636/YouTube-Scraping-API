@@ -136,6 +136,14 @@ button:focus, button:active {
 	outline: none
 }
 
+.shadow-md {
+	box-shadow: 0 2px 4px rgba(0,0,0,0.3)
+}
+
+.sticky {
+	box-shadow: 0 -2px 4px rgb(0, 0, 0, 0.15)
+}
+
 @media (max-width: 950px) {
 	table.docutils td {
 		word-break: break-word;
