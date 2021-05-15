@@ -77,6 +77,10 @@ nav {
 	font-size: 1rem
 }
 
+.sig-object {
+	word-break: break-all;
+}
+
 code, .sig-object {
 	font-family: 'Hermit' !important;
 }
@@ -93,7 +97,16 @@ input:focus, input:active {
 #searchbox button {
 	display: inherit;
 	background: white;
-	color: rgba(26,32,44,var(--tw-bg-opacity))
+	color: rgba(26,32,44,var(--tw-bg-opacity));
+	border-radius: 0 50px 50px 0
+}
+
+#main-wrapper section {
+	margin-right: 0
+}
+
+dd {
+	padding-left: 0
 }
 
 nav[aria-label="breadcrumbs"] {
@@ -104,11 +117,44 @@ a[aria-label="Back to homepage"]:hover {
 	background: none
 }
 
+input[aria-labelledby="search-label"] {
+	border-radius: 50px 0 0 50px;
+	padding-left: 20px
+}
+
+button, a {
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+button:focus, button:active {
+	outline: none
+}
+
+@media (max-width: 950px) {
+	table.docutils td {
+		word-break: break-word;
+		min-width: 200px
+	}
+}
+
 @media (max-width: 768px) {
 	nav[aria-label="breadcrumbs"] {
 		margin-top: 1rem
 	}
 	footer, section, main {
 		max-width: 100%
+	}
+	table.docutils tr {
+		display: flex;
+		flex-direction: column;
+	}
+	main {
+		margin-right: 0
 	}
 }
