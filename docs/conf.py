@@ -74,6 +74,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 #
 html_theme = "sphinxawesome_theme"
 html_domain_indices = True
+html_favicon = '_static/favicon.ico'
 
 import pygments.styles, pygments.token
 def monkeypatch_pygments(name, base_name='default', attrs={}):
