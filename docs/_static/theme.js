@@ -540,7 +540,15 @@ n.n = function(t) {
 				}
 			})),
 			function() {
-				const update_toc_tree = ()=>{
+				let guid = () => {
+					let s4 = () => {
+						return Math.floor((1 + Math.random()) * 0x10000)
+							.toString(16)
+							.substring(1);
+					}
+					return 'C'+s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+				}
+				let update_toc_tree = ()=>{
 					$('#main-wrapper section').each(function(){
 						var top_of_element = $(this).offset().top;
 						var bottom_of_element = $(this).offset().top + $(this).outerHeight() - 50;
@@ -548,16 +556,41 @@ n.n = function(t) {
 						var top_of_screen = $(window).scrollTop();
 
 						if ((bottom_of_screen > top_of_element) && (top_of_screen < bottom_of_element)){
-							$(`.nav-toc a[href="#${$(this).attr('id')}"]`).addClass('current')
+							$(`.nav-toc a[href="#${$(this).attr('id')}"]`).addClass('current');
 						} else {
-							$(`.nav-toc a[href="#${$(this).attr('id')}"]`).removeClass('current')
+							$(`.nav-toc a[href="#${$(this).attr('id')}"]`).removeClass('current');
 						}
 					})
 				}
-				$('#main-wrapper').scroll(update_toc_tree)
 				$(document).ready(()=>{
-					$('pre').addClass('highlight')
-					update_toc_tree
+					$('pre').addClass('highlight');
+  					var scrollbar = Scrollbar.init(document.querySelector('#main-wrapper'));
+					$('.highlight').each(function(){
+						$(this).attr('hash', guid())
+						Scrollbar.init(document.querySelector(`*[hash=${$(this).attr('hash')}]`));
+					})
+					scrollbar.addListener(update_toc_tree)
+					const hash = window.location.hash;
+					if (hash) {
+						const target = document.getElementById(hash.substring(1));
+						if (target) {
+						  scrollbar.scrollIntoView(target, {
+							offsetTop: -scrollbar.containerEl.scrollTop+80,
+						  });
+						}
+					  }
+					  
+					  window.addEventListener('hashchange', function () {
+						const hash = window.location.hash;
+						if (hash) {
+						  const target = document.getElementById(hash.substring(1));
+						  if (target) {
+							scrollbar.scrollIntoView(target, {
+							  offsetTop: -scrollbar.containerEl.scrollTop,
+							});
+						  }
+						}
+					  }, false);
 				})
 			}(), document.querySelectorAll(".accordion").forEach((t => {
 				t.onclick = t => {

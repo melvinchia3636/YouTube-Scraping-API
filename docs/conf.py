@@ -59,7 +59,7 @@ autosummary_generate = True
 templates_path = ['_templates']
 html_static_path = ['_static']
 html_css_files = ["mod.css"]
-html_js_files = ['jquery.visible.min.js']
+html_js_files = ['jquery.visible.min.js', 'smooth-scrollbar.js']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

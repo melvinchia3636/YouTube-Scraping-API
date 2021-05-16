@@ -104,6 +104,9 @@ class CaptionQuery(list):
         super(CaptionQuery, self).__init__(data)
         self.default=default
 
+    def __repr__(self):
+        return f'<CaptionQuery {list(self)}>'
+
     def get_caption(self, language_code: Optional[str] = None) -> Optional[Caption]:
         """Get caption by language code
 

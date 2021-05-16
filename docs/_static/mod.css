@@ -9,6 +9,10 @@ body {
 	font-family: 'Poppins' !important;
 }
 
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 500
+}
+
 p {
 	font-family: 'Montserrat' !important;
 }
@@ -16,6 +20,10 @@ p {
 img, svg {
 	max-width: none;
 	display: inline
+}
+
+#main-wrapper {
+	position: relative
 }
 
 .image-reference {
@@ -83,6 +91,12 @@ nav {
 
 code, .sig-object {
 	font-family: 'Hermit' !important;
+	background: white !important;
+	font-size: 1rem !important;
+}
+
+code {
+	padding: 0 !important
 }
 
 .sig-param {

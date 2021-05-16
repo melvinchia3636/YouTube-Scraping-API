@@ -7,6 +7,9 @@ PAYLOAD = {
         "user": {
             "lockedSafetyMode": False,
         }
+    },
+    "webClientInfo": {
+        "isDocumentHidden": True
     }
 }
 

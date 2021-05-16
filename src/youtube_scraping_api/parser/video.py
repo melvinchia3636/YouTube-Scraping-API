@@ -175,6 +175,10 @@ class Video():
         return int(self._player_info["lengthSeconds"])
 
     @custom_property
+    def view_count(self) -> Optional[int]:
+        return self._player_info["viewCount"]
+
+    @custom_property
     def raw(self) -> Dict[str, Any]:
         """Return a dictionary containing all data of video
 

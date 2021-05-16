@@ -1,4 +1,4 @@
 from youtube_scraping_api import YoutubeAPI
 api = YoutubeAPI()
-for i in api.search('python'):
-	print(i)
+video = api.video('WzxSiEWK3cg')
+print(video.download_data)
