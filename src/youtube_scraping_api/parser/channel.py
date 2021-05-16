@@ -11,7 +11,7 @@ class Channel:
     def __init__(self, channel_id=None, username=None, builtin_called=False, **kwargs):
         self._session = requests.Session()
         self._session.headers = HEADERS
-        self.has_generated = False
+        self._has_generated = False
 
         self.id = channel_id
         self.username = username
@@ -49,7 +49,7 @@ class Channel:
         self._metadata = data["metadata"]["channelMetadataRenderer"]
         self._header_data = data["header"]
         
-        self.has_generated = True
+        self._has_generated = True
 
     @custom_property
     def name(self):

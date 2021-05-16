@@ -18,7 +18,7 @@ class Video():
     def __init__(self, videoId: str, builtin_called: bool = False, **kwargs):
         self._session = requests.Session()
         self._session.headers = HEADERS
-        self.has_generated = False
+        self._has_generated = False
 
         self._raw = None
         self._player_data = None
@@ -50,7 +50,7 @@ class Video():
             self._secondary_info = next(searchDict(self._init_data, "videoSecondaryInfoRenderer"))
             self._player_info = self._player_data["videoDetails"]
 
-            self.has_generated = True
+            self._has_generated = True
         except StopIteration:
             self._session = requests.Session()
             self._session.headers = HEADERS
@@ -185,7 +185,6 @@ class Video():
         :return: Raw data of video
         :rtype: dict
         """
-        if not self._primary_info: self.parseData()
         primary_info = self._primary_info
         player_info = self._player_info
         cleaned_data = {
@@ -196,7 +195,7 @@ class Video():
             "description": self.description,
             "tags": self.tags,
             "publish_time": self.publish_time,
-            "author": self.author,
+            "author": self.author.name,
             "length": self.length,
             "thumbnails": self.thumbnails,
             "statistics": {

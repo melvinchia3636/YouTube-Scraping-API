@@ -27,6 +27,16 @@ Caption
 .. automodule:: youtube_scraping_api.caption
    :members:
 
+Playlist
+--------
+
+.. autoclass:: youtube_scraping_api.parser.playlist.Playlist
+   :members:
+
+.. autoclass:: youtube_scraping_api.parser.playlist.PlaylistVideo
+   :members:
+   :inherited-members:
+
 Channel
 -------
 

@@ -1,5 +1,6 @@
-from ..utils import searchDict, getThumbnail
-from .video import Video
+from youtube_scraping_api.utils import searchDict, getThumbnail
+from youtube_scraping_api.parser.video import Video
+from youtube_scraping_api.decorators import custom_property
 
 def cleanupData(data, nextCT=None):
     result = []
@@ -14,38 +15,93 @@ def cleanupData(data, nextCT=None):
     if len(result) == 1: return result[0]
     return result
 
-class Metadata:
-    def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)
-
 class Playlist(list):
-    def __init__(self, response):
-        first_data = response["metadata"]["playlistMetadataRenderer"]
-        second_data = next(searchDict(response, "videoOwnerRenderer"))
-        video_count, total_views, last_updated = next(searchDict(response, "stats"))
-        last_updated = "".join(i["text"] for i in last_updated["runs"])
-        if "Last updated on" in last_updated: last_updated = " ".join(last_updated.split()[3:])
-        if "Updated" in last_updated: last_updated = " ".join(last_updated.split()[1:])
+    """A container of playlist metadata and  its videos"""
+    def __init__(self, response, builtin_called=False):
+        self.first_data = response["metadata"]["playlistMetadataRenderer"]
+        self.second_data = next(searchDict(response, "videoOwnerRenderer"))
+        self._is_builtin_callled = builtin_called
+        self._static_properties = []
+        self._has_generated = False
 
         data = cleanupData(next(searchDict(response,"itemSectionRenderer"))["contents"])
         super(Playlist, self).__init__(data)
 
-        self.title = first_data["title"]
-        self.description = first_data["description"] if "description" in first_data else None
-        self.owner = second_data["title"]["runs"][0]["text"]
-        self.video_count = int(video_count["runs"][0]["text"].replace(",", ""))
-        self.view_count = int(total_views["simpleText"].split()[0].replace(",", ""))
-        self.last_updated = last_updated
+    def _parseData(self):
+        pass
+
+    @custom_property
+    def title(self):
+        """Exrtract name of the playlist
+        
+        :return: Playlist name
+        :rtype: str
+        """
+        return self.first_data["title"]
+
+    @custom_property
+    def description(self):
+        """Extract description of the playlist if available
+    
+        :return: Playlist description
+        :rtype: str of None
+        """
+        return self.first_data["description"] if "description" in self.first_data else None
+    
+    @custom_property
+    def owner(self):
+        """Return the name of playlist creator
+    
+        :return: Playlist creator name
+        :rtype: str
+        """
+        return self.second_data["title"]["runs"][0]["text"]
+    
+    @custom_property
+    def video_count(self):
+        """Count how many videos are in the playlist
+
+        :return: Number of videos in the playlist
+        :rtype: int
+        """
+        video_count, *_ = next(searchDict(self.response, "stats"))
+        return int(video_count["runs"][0]["text"].replace(",", ""))
+    
+    @custom_property
+    def view_count(self):
+        """Count the total views of all videos in the playlist
+
+        :return: Total views of videos in the playlist
+        :rtype: int
+        """
+        _, total_views, _ = next(searchDict(self.response, "stats"))
+        return int(total_views["simpleText"].split()[0].replace(",", ""))
+    
+    @custom_property
+    def last_updated(self):
+        """Return the time when the playlist is last updated
+
+        :return: Playlist last updated time
+        :rtype: str
+        """
+        *_, last_updated = next(searchDict(self.response, "stats"))
+        last_updated = "".join(i["text"] for i in last_updated["runs"])
+        if "Last updated on" in last_updated: last_updated = " ".join(last_updated.split()[3:])
+        if "Updated" in last_updated: last_updated = " ".join(last_updated.split()[1:])
+        return last_updated
 
     def __repr__(self):
         return f'<Playlist title="{self.title}" video_count={len(self)}>'
 
-def parsePlaylistContent(data):
-    return cleanupData(data["contents"])
-
 class PlaylistVideo(Video):
+    """A container of playlist with the video index in playlist video that function exactly the same as Video Object"""
     def __init__(self, data):
         self.index = int(data["index"]["simpleText"])
+        """Index of the video in playlist
+
+        :return: Video index in playlist
+        :rtype: int
+        """
         super().__init__(
             data["videoId"],
             length = data["lengthText"]["simpleText"] if "lengthText" in data else None,
@@ -58,11 +114,14 @@ class PlaylistVideo(Video):
 
     @property
     def raw(self):
-        return {
-            "index": self.index
-        } | super().raw
+        """Return a dictionary containing all data of the playlist video
+
+        :return: Raw data of video
+        :rtype: dict
+        """
+        return {"index": self.index, **super().raw}
 
 RENDERER_PARSER = {
-    "playlistVideoListRenderer": parsePlaylistContent,
+    "playlistVideoListRenderer": lambda data: cleanupData(data["contents"]),
     "playlistVideoRenderer": PlaylistVideo
 }
