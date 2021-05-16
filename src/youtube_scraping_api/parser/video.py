@@ -196,7 +196,7 @@ class Video():
             "description": self.description,
             "tags": self.tags,
             "publish_time": self.publish_time,
-            "author": self.author.raw,
+            "author": self.author,
             "length": self.length,
             "thumbnails": self.thumbnails,
             "statistics": {
@@ -215,19 +215,21 @@ class Video():
         :rtype: list
         """
         if not self._player_data: self.parseData()
-        return dict([(i["itag"], {
-            "url": i["url"] if "url" in i else None,
-            'signature_cipher': i["signatureCipher"] if "signatureCipher" in i else None,
-            "mime_type": i["mimeType"],
-            "bitrate": i["bitrate"],
-            "width": i["width"] if "width" in i else None,
-            "height": i["height"] if "height" in i else None,
-            "size": i["contentLength"] if "contentLength" in i else None,
-            "fps": i["fps"] if "fps" in i else None,
-            "quality": i["quality"],
-            "quality_label": i["qualityLabel"] if "qualityLabel" in i else None,
-            "duration": i["approxDurationMs"] if "approxDurationMs" in i else None
-        }) for i in self._player_data["streamingData"]["formats"]+self._player_data["streamingData"]["adaptiveFormats"]]) if self.type!="livestream" else None
+        try:
+            return dict([(i["itag"], {
+                "url": i["url"] if "url" in i else None,
+                'signature_cipher': i["signatureCipher"] if "signatureCipher" in i else None,
+                "mime_type": i["mimeType"],
+                "bitrate": i["bitrate"],
+                "width": i["width"] if "width" in i else None,
+                "height": i["height"] if "height" in i else None,
+                "size": i["contentLength"] if "contentLength" in i else None,
+                "fps": i["fps"] if "fps" in i else None,
+                "quality": i["quality"],
+                "quality_label": i["qualityLabel"] if "qualityLabel" in i else None,
+                "duration": i["approxDurationMs"] if "approxDurationMs" in i else None
+            }) for i in self._player_data["streamingData"]["formats"]+self._player_data["streamingData"]["adaptiveFormats"]]) if self.type!="livestream" else None
+        except: pass
 
     def getFileSize(self, url: str) -> int:
         """Get the size of video stream
@@ -281,6 +283,7 @@ class Video():
         :return: None, just download the video and save it
         :rtype: None
         """
+        if not self.download_data: return None
         if itag:
             if itag in self.download_data.keys(): target = self.download_data[itag]
             else: raise RuntimeError('Itag not exist!')

@@ -61,7 +61,6 @@ Retrieve metadata
 `````````````````
 
 .. code-block::
-	:linenos:
 	
 	>>> video.title
 	"PARIS | A380 LANDING 4K EXTENDED"

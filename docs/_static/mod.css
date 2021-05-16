@@ -7,10 +7,12 @@
 
 body {
 	font-family: 'Poppins' !important;
+	color: #141414;
 }
 
 h1, h2, h3, h4, h5, h6 {
-	font-weight: 500
+	font-weight: 500;
+	color: #141414 !important
 }
 
 p {
@@ -20,6 +22,13 @@ p {
 img, svg {
 	max-width: none;
 	display: inline
+}
+
+:is(a, button, svg):focus, :is(a, button, svg):hover, .current {
+	color: rgb(14, 43, 100) !important;
+	text-decoration: none !important;
+	border: none !important;
+	outline: none !important;
 }
 
 #main-wrapper {
@@ -61,6 +70,11 @@ em.property {
 header {
 	padding-top: 14px;
 	padding-bottom: 14px;
+	background: #141414 !important
+}
+
+header h2 {
+	color: white !important
 }
 
 nav {

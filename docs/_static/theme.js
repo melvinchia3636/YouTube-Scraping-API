@@ -564,7 +564,10 @@ n.n = function(t) {
 				}
 				$(document).ready(()=>{
 					$('pre').addClass('highlight');
-  					var scrollbar = Scrollbar.init(document.querySelector('#main-wrapper'));
+  					var scrollbar = Scrollbar.init(document.querySelector('#main-wrapper'), {
+						continuousScrolling: true,
+						damping: 0.05
+					  });
 					$('.highlight').each(function(){
 						$(this).attr('hash', guid())
 						Scrollbar.init(document.querySelector(`*[hash=${$(this).attr('hash')}]`));
