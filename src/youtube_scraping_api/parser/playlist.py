@@ -20,7 +20,7 @@ class Playlist(list):
     def __init__(self, response, builtin_called=False):
         self.first_data = response["metadata"]["playlistMetadataRenderer"]
         self.second_data = next(searchDict(response, "videoOwnerRenderer"))
-        self._is_builtin_callled = builtin_called
+        self._is_builtin_called = builtin_called
         self._static_properties = []
         self._has_generated = False
 

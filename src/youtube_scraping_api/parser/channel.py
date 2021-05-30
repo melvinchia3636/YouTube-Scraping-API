@@ -19,14 +19,14 @@ class Channel:
         self._about_data = None
         self._metadata = None
         self._header_data = None
-        self._is_builtin_callled = builtin_called
+        self._is_builtin_called = builtin_called
 
         self._static_properties = kwargs
 
     def __repr__(self):
         return f'<Channel id="{self.id}" name="{self.name}">'
 
-    def parse_data(self):
+    def parseData(self):
         """Fetch HTML source code and extract JSON data from it
 
         :return: Nothing, data have been set inside local variable
@@ -174,17 +174,23 @@ class Channel:
             return False
         except: return False
 
-    def get_metadata(self):
+    @custom_property
+    def raw(self):
         """Returns all available channel metadata
 
         :return: A dictionary with metadata values
         :rtype: dict
         """
-        try:
-            if self._metadata:
-                return self._metadata
-            else:
-                self.parse_data()
-                return self._metadata
-        except:
-            return None
+        return {
+            'name': self.name,
+            'description': self.description,
+            'keywords': self.keywords,
+            'url': self.url,
+            'vanity_url': self.vanity_url,
+            'facebook_profile_id': self.facebook_profile_id,
+            'avatar': self.avatar,
+            'subscriber_count': self.subscriber_count,
+            'header_links': self.header_links,
+            'is_verified': self.is_verified
+        }
+        

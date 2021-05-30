@@ -26,7 +26,7 @@ class Video():
         self._primary_info = None
         self._secondary_info = None
         self._player_info = None
-        self._is_builtin_callled = builtin_called
+        self._is_builtin_called = builtin_called
 
         self.id = videoId
         self.thumbnails = getThumbnail(self.id)
