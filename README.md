@@ -32,3 +32,7 @@ https://ytsa.thecodeblog.net
 - Query suggestions feature added
 - Docstring for every methods and classes added
 - Documentation added
+
+### 1.1.0
+- Major bug fixed
+- Feature to scrape search query suggestions added
