@@ -3,7 +3,7 @@ An easy-to-use YouTube API, without any kind of quota, and download any videos o
 I'm still working on it, so stay tuned for more updates to come.
 
 ## Documentation
-https://youtube-scraping-api.readthedocs.io
+https://ytsa.thecodeblog.net
 
 ## Version
 
@@ -32,3 +32,10 @@ https://youtube-scraping-api.readthedocs.io
 - Query suggestions feature added
 - Docstring for every methods and classes added
 - Documentation added
+
+### 1.1.0
+- Major bug fixed
+- Feature to scrape search query suggestions added
+
+### 1.1.1
+- Version log updated

@@ -26,19 +26,19 @@ class Channel:
     def __repr__(self):
         return f'<Channel id="{self.id}" name="{self.name}">'
 
-    def parseData(self):
+    def parse_data(self):
         """Fetch HTML source code and extract JSON data from it
-        
+
         :return: Nothing, data have been set inside local variable
         :rtype: None
         """
         if not (self.id or self.username): return {}
         if self.id: url = (
-            CHANNEL_ID_URL+self.id, 
+            CHANNEL_ID_URL+self.id,
             CHANNEL_ID_URL+self.id+"/about"
         )
         elif self.username: url = (
-            CHANNEL_USERNAME_URL+self.username, 
+            CHANNEL_USERNAME_URL+self.username,
             CHANNEL_USERNAME_URL+self.username+"/about"
         )
         response = [self._session.get(i).text for i in url]
@@ -48,7 +48,7 @@ class Channel:
         data, self._about_data = (getInitialData(i) for i in response)
         self._metadata = data["metadata"]["channelMetadataRenderer"]
         self._header_data = data["header"]
-        
+
         self._has_generated = True
 
     @custom_property
@@ -173,3 +173,18 @@ class Channel:
                 return True
             return False
         except: return False
+
+    def get_metadata(self):
+        """Returns all available channel metadata
+
+        :return: A dictionary with metadata values
+        :rtype: dict
+        """
+        try:
+            if self._metadata:
+                return self._metadata
+            else:
+                self.parse_data()
+                return self._metadata
+        except:
+            return None
