@@ -39,3 +39,7 @@ https://ytsa.thecodeblog.net
 
 ### 1.1.1
 - Version log updated
+
+### 1.1.2
+- Minor bug fixed
+- User can now parse raw metadata from channel object
