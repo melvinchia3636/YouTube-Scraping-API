@@ -1,10 +1,12 @@
 LICENSE
+MANIFEST.in
 README.md
 pyproject.toml
 setup.cfg
 setup.py
 src/youtube_scraping_api/__init__.py
 src/youtube_scraping_api/__main__.py
+src/youtube_scraping_api/caption.py
 src/youtube_scraping_api/cipher.py
 src/youtube_scraping_api/constants.py
 src/youtube_scraping_api/decorators.py
