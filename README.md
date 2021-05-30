@@ -36,3 +36,6 @@ https://ytsa.thecodeblog.net
 ### 1.1.0
 - Major bug fixed
 - Feature to scrape search query suggestions added
+
+### 1.1.1
+- Version log updated
