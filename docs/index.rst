@@ -55,6 +55,22 @@ Features
 * Welly documented source code
 * You can literally create a fully working YouTube clone with this API :)
 
+Todo
+----
+* Callback function for video downloading
+* Unit test for each features
+* Ability to merge high quality videos and sound
+* Turn video download data into object
+* Extract from channel:
+   * all videos
+   * all playlist
+   * channel page
+   * community posts
+   * all external links in about page
+   * sections in channel homepage
+* Search results filtering system
+* Search results sorting system
+
 .. toctree::
    :maxdepth: 9999
    :caption: Contents:
