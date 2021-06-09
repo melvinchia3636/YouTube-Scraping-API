@@ -1,3 +1,5 @@
+<h1>This project has been temporary abandoned due to YouTube Captcha system</h1>
+
 # YouTube-Scraping-API
 An easy-to-use YouTube API, without any kind of quota, and download any videos on youtube as much as you like. <br />
 I'm still working on it, so stay tuned for more updates to come.
