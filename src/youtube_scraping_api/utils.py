@@ -108,3 +108,16 @@ def getThumbnail(videoId):
     :todo: Check thumbnail urls availability
     """
     return dict(map(lambda i: (i[0], i[1].format(videoId)), THUMBNAIL_TEMPLATE.items()))
+
+def getProxy():
+    proxies = requests.get('https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=4550&country=all&ssl=all&anonymity=all&simplified=true').text.split('\r\n')
+    for i in proxies:
+        try:
+            proxy = {
+                'http': 'http://'+i,
+                'https': 'http://'+i
+            }
+            requests.get('https://youtube.com', proxies=proxy, timeout=5)
+            return proxy
+        except:
+            pass
