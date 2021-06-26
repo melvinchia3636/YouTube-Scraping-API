@@ -47,3 +47,6 @@ https://ytsa.thecodeblog.net
 ### 1.1.3
 - Minor bug fixed
 - Proxies added
+
+### 1.1.4
+- getAllFilters function added
