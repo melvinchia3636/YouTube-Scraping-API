@@ -49,4 +49,4 @@ https://ytsa.thecodeblog.net
 - Proxies added
 
 ### 1.1.4
-- getAllFilters function added
+- `getAllFilters` function added
