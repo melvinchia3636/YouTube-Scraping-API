@@ -1,6 +1,22 @@
 import json
+
+import requests
 from .utils import getInitialData, searchDict
 from .urls import BASE_URL
+from .constants import HEADERS
+
+class AvailableSearchFilter:
+	"""An object containing all available search filters
+	"""
+	def __init__(self, duration=None, upload_date=None, type=None, features=None, sort_by=None):
+		self.duration = duration
+		self.upload_date = upload_date
+		self.type = type
+		self.features = features
+		self.sort_by = sort_by
+
+	def __repr__(self):
+		return f'<AvailableSearchFilter sort_by:{len(self.sort_by)} upload_date:{len(self.upload_date)} type:{len(self.type)} features:{len(self.features)} duration:{len(self.duration)}>'
 
 class SearchFilter:
 	"""Filter for search results
@@ -16,15 +32,31 @@ class SearchFilter:
 	:type sort_by: str or None
 	:param upload_date:
 		(optional) Upload date of videos
-	:type upload_date: datetime or None
+	:type upload_date: str or None
+	:param duration:
+		(optional) Expected duration of videos
+	:type upload_date: str or None
 
 	:rtype: Object[SearchFilter]
 	"""
-	def __init__(self, type=None, features=None, sort_by=None, upload_date=None):
+	def __init__(self, type=None, features=None, sort_by=None, upload_date=None, duration=None):
 		self.type = (type, 'Type')
 		self.features = (features, 'Features')
 		self.sort_by = (sort_by, 'Sort by')
 		self.upload_date = (upload_date, 'Upload date')
+		self.duration = (duration, 'Duration')
+
+	@classmethod
+	def getAllFilters(self):
+		"""Get all available filters that can be used when querying search results
+		"""
+		session = requests.Session()
+		session.headers = HEADERS
+		raw = getInitialData(session.get('https://www.youtube.com/results?search_query=hermitcraft').text)
+		filter_groups = [i['searchFilterGroupRenderer'] for i in next(searchDict(raw, "searchSubMenuRenderer"))['groups']]
+		cleaned_filter_groups = dict([[i['title']['simpleText'].lower().replace(' ', '_'), [i['searchFilterRenderer']['label']['simpleText'] for i in i['filters']]] for i in filter_groups])
+		
+		return AvailableSearchFilter(**cleaned_filter_groups)
 
 def getFilteredUrl(session, base_url, filter):
 	"""Generate valid search url that includes query string filter
@@ -39,7 +71,7 @@ def getFilteredUrl(session, base_url, filter):
 	:rtype: str
 	"""
 	url = base_url
-	for i in [filter.type, filter.sort_by, filter.upload_date]:
+	for i in [filter.type, filter.sort_by, filter.upload_date, filter.duration]:
 		if i[0]:
 			raw = getInitialData(session.get(url).text)
 			filter_groups = [i['searchFilterGroupRenderer'] for i in next(searchDict(raw, "searchSubMenuRenderer"))['groups']]
