@@ -27,10 +27,10 @@ class YoutubeAPI:
         except: raise RuntimeError("Please check your internet connection")
 
         if len(raw) < 10000: 
-            self._session.proxies = getProxy()
+            self._session.proxies = get_proxy()
         
         self.DEBUG_LEVEL = dict([i[::-1] for i in enumerate(["INFO", "SUCCESS", "WARNING", "ERROR"])])
-        self.API_TOKEN = findSnippet(raw, "innertubeApiKey", ",", (3, 1))
+        self.API_TOKEN = find_snippet(raw, "innertubeApiKey", ",", (3, 1))
 
     def search(self, query=None, continuation_token=None, raw=False, filter=None):
         """Parse YouTube search results of specific query or continuation token
@@ -50,25 +50,25 @@ class YoutubeAPI:
 
         if query:
             base_url = SEARCH_BASE_URL+"+".join(query.split())
-            if filter and isinstance(filter, SearchFilter): final_url = getFilteredUrl(self._session, base_url, filter)
+            if filter and isinstance(filter, SearchFilter): final_url = get_filtered_url(self._session, base_url, filter)
             else: final_url = base_url
             html = self._session.get(final_url).text
-            response = getInitialData(html)
+            response = get_initial_data(html)
         
         elif continuation_token:
             self._data["continuation"] = continuation_token
             response = self._session.post(SEARCH_CONTINUATION_URL+self.API_TOKEN, json=self._data).json()
 
-        nextCT = parseContinuationToken(response)
+        nextCT = parse_continuation_token(response)
         
         if query:
-            data = [next(searchDict(i, "contents")) for i in searchDict(response,"itemSectionRenderer")]
+            data = [next(search_dict(i, "contents")) for i in search_dict(response,"itemSectionRenderer")]
             result = SearchResult(itertools.chain(*[cleanupVideoData(i) for i in data]), nextCT)
             result.url = final_url
         
         if continuation_token:
-            try: data = next(searchDict(response, "contents"))
-            except: data = next(searchDict(response, "continuationItems"))
+            try: data = next(search_dict(response, "contents"))
+            except: data = next(search_dict(response, "continuationItems"))
             result = cleanupVideoData(data, nextCT, to_object=True)
         
         if not raw: return result
@@ -90,20 +90,20 @@ class YoutubeAPI:
 
         if playlist_id:
             html = self._session.get(PLAYLIST_BASE_URL+playlist_id).text
-            response = getInitialData(html)
+            response = get_initial_data(html)
 
         elif continuation_token:
             if not continuation_token: return {}, None
             self._data["continuation"] = continuation_token
             response = self._session.post(PLAYLIST_CONTINUTION_URL+self.API_TOKEN, json=self._data).json()
 
-        nextCT = parseContinuationToken(response)
+        nextCT = parse_continuation_token(response)
 
         if playlist_id: 
             result = Playlist(response)
         
         elif continuation_token: 
-            data = next(searchDict(response, "continuationItems"))
+            data = next(search_dict(response, "continuationItems"))
             result = cleanupPlaylistData(data)
 
         while nextCT:

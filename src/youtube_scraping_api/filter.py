@@ -1,7 +1,7 @@
 import json
 
 import requests
-from .utils import getInitialData, searchDict
+from .utils import get_initial_data, search_dict
 from .urls import BASE_URL
 from .constants import HEADERS
 
@@ -20,7 +20,7 @@ class AvailableSearchFilter:
 
 class SearchFilter:
 	"""Filter for search results
-	
+
 	:param type:
 		(optional) Type of search result
 	:type type: str or None
@@ -47,18 +47,18 @@ class SearchFilter:
 		self.duration = (duration, 'Duration')
 
 	@classmethod
-	def getAllFilters(self):
+	def get_all_filters(self):
 		"""Get all available filters that can be used when querying search results
 		"""
 		session = requests.Session()
 		session.headers = HEADERS
-		raw = getInitialData(session.get('https://www.youtube.com/results?search_query=hermitcraft').text)
-		filter_groups = [i['searchFilterGroupRenderer'] for i in next(searchDict(raw, "searchSubMenuRenderer"))['groups']]
+		raw = get_initial_data(session.get('https://www.youtube.com/results?search_query=hermitcraft').text)
+		filter_groups = [i['searchFilterGroupRenderer'] for i in next(search_dict(raw, "searchSubMenuRenderer"))['groups']]
 		cleaned_filter_groups = dict([[i['title']['simpleText'].lower().replace(' ', '_'), [i['searchFilterRenderer']['label']['simpleText'] for i in i['filters']]] for i in filter_groups])
-		
+
 		return AvailableSearchFilter(**cleaned_filter_groups)
 
-def getFilteredUrl(session, base_url, filter):
+def get_filtered_url(session, base_url, filter):
 	"""Generate valid search url that includes query string filter
 
 	:param session: Requests session
@@ -73,27 +73,27 @@ def getFilteredUrl(session, base_url, filter):
 	url = base_url
 	for i in [filter.type, filter.sort_by, filter.upload_date, filter.duration]:
 		if i[0]:
-			raw = getInitialData(session.get(url).text)
-			filter_groups = [i['searchFilterGroupRenderer'] for i in next(searchDict(raw, "searchSubMenuRenderer"))['groups']]
+			raw = get_initial_data(session.get(url).text)
+			filter_groups = [i['searchFilterGroupRenderer'] for i in next(search_dict(raw, "searchSubMenuRenderer"))['groups']]
 			target_group = [f for f in filter_groups if f['title']['simpleText']==i[1]][0]
 			if not target_group: raise AttributeError(f'Filter type {i} not found')
 			filters = [i['searchFilterRenderer'] for i in target_group['filters']]
 			target_filter = [f for f in filters if f['label']['simpleText']==i[0]]
 			if not target_filter: raise AttributeError('Filter "{}" not found in {}'.format(i[0], target_group['title']['simpleText']))
-			try: url = BASE_URL+next(searchDict(target_filter, 'url'))
+			try: url = BASE_URL+next(search_dict(target_filter, 'url'))
 			except: pass
 
 	if filter.features[0] and isinstance(filter.features[0], list):
 		for i in filter.features[0]:
 			if i and isinstance(i, str):
-				raw = getInitialData(session.get(url).text)
-				filter_groups = [i['searchFilterGroupRenderer'] for i in next(searchDict(raw, "searchSubMenuRenderer"))['groups']]
+				raw = get_initial_data(session.get(url).text)
+				filter_groups = [i['searchFilterGroupRenderer'] for i in next(search_dict(raw, "searchSubMenuRenderer"))['groups']]
 				target_group = [f for f in filter_groups if f['title']['simpleText']=='Features'][0]
 				if not target_group: raise AttributeError(f'Filter type {i} not found')
 				filters = [i['searchFilterRenderer'] for i in target_group['filters']]
 				target_filter = [f for f in filters if f['label']['simpleText']==i]
 				if not target_filter: raise AttributeError('Filter "{}" not found in {}'.format(i[0], target_group['title']['simpleText']))
-				try: url = BASE_URL+next(searchDict(target_filter, 'url'))
+				try: url = BASE_URL+next(search_dict(target_filter, 'url'))
 				except: pass
 			else:
 				raise TypeError('Features filter elements must be a string')

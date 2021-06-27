@@ -1,4 +1,4 @@
-from youtube_scraping_api.utils import searchDict, getThumbnail
+from youtube_scraping_api.utils import search_dict, get_thumbnail
 from youtube_scraping_api.parser.video import Video
 from youtube_scraping_api.decorators import custom_property
 
@@ -19,15 +19,15 @@ class Playlist(list):
     """A container of playlist metadata and  its videos"""
     def __init__(self, response, builtin_called=False):
         self.first_data = response["metadata"]["playlistMetadataRenderer"]
-        self.second_data = next(searchDict(response, "videoOwnerRenderer"))
+        self.second_data = next(search_dict(response, "videoOwnerRenderer"))
         self._is_builtin_called = builtin_called
         self._static_properties = []
         self._has_generated = False
 
-        data = cleanupData(next(searchDict(response,"itemSectionRenderer"))["contents"])
+        data = cleanupData(next(search_dict(response,"itemSectionRenderer"))["contents"])
         super(Playlist, self).__init__(data)
 
-    def _parseData(self):
+    def _parse_data(self):
         pass
 
     @custom_property
@@ -64,7 +64,7 @@ class Playlist(list):
         :return: Number of videos in the playlist
         :rtype: int
         """
-        video_count, *_ = next(searchDict(self.response, "stats"))
+        video_count, *_ = next(search_dict(self.response, "stats"))
         return int(video_count["runs"][0]["text"].replace(",", ""))
     
     @custom_property
@@ -74,7 +74,7 @@ class Playlist(list):
         :return: Total views of videos in the playlist
         :rtype: int
         """
-        _, total_views, _ = next(searchDict(self.response, "stats"))
+        _, total_views, _ = next(search_dict(self.response, "stats"))
         return int(total_views["simpleText"].split()[0].replace(",", ""))
     
     @custom_property
@@ -84,7 +84,7 @@ class Playlist(list):
         :return: Playlist last updated time
         :rtype: str
         """
-        *_, last_updated = next(searchDict(self.response, "stats"))
+        *_, last_updated = next(search_dict(self.response, "stats"))
         last_updated = "".join(i["text"] for i in last_updated["runs"])
         if "Last updated on" in last_updated: last_updated = " ".join(last_updated.split()[3:])
         if "Updated" in last_updated: last_updated = " ".join(last_updated.split()[1:])
@@ -103,9 +103,9 @@ class PlaylistVideo(Video):
         :rtype: int
         """
         super().__init__(
-            data["videoId"],
+            data["video_id"],
             length = data["lengthText"]["simpleText"] if "lengthText" in data else None,
-            thumbnails = getThumbnail(data["videoId"]),
+            thumbnails = get_thumbnail(data["video_id"]),
             builtin_called = True
         )
     

@@ -22,7 +22,7 @@ Youtube Scraping API
 .. image:: https://img.shields.io/github/repo-size/melvinchia3636/YouTube-Scraping-API
   :alt: Repo Size
   :target: https://github.com/melvinchia3636/YouTube-Scraping-API
-  
+
 
 **Youtube Scraping API** is a lightweight, easy-to-use library packed with Youtube data scraper and video downloader. This scraping api doesn't depend on Youtube Official API, since there are strict quota when using it. With this API, you can get access to all data of **Youtube videos**, **playlists**, **channels**, and **search results**. Simply download the package using pip, and you're ready to go. For those who never use this API before, :ref:`Quickstart Guide <quickstart>` can help you get started with using this API quickly.
 
@@ -33,12 +33,12 @@ Here is a simple demonstration
    from youtube_scraping_api import YoutubeAPI
    api = YoutubeAPI()
 
-   #search for videos, playlists, channels, and etc.
+   # search for videos, playlists, channels, and etc.
    api.search('python tutorial')
 
-   #download videos
+   # download videos
    api.video('a1EYnngNHIA').download()
-   
+
 Of course these are just a tip of the iceberg. We have a lot more features available in this API.
 
 Features
@@ -52,7 +52,7 @@ Features
 * Scrape captions of videos
 * Ability to log progress when executing code
 * Nicely formed object structure
-* Welly documented source code
+* Well documented source code
 * You can literally create a fully working YouTube clone with this API :)
 
 Todo

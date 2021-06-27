@@ -1,5 +1,5 @@
 from youtube_scraping_api.constants import HEADERS
-from youtube_scraping_api.utils import searchDict, revealRedirectUrl, getInitialData
+from youtube_scraping_api.utils import search_dict, reveal_redirect_url, get_initial_data
 from youtube_scraping_api.decorators import custom_property
 from youtube_scraping_api.urls import *
 
@@ -26,7 +26,7 @@ class Channel:
     def __repr__(self):
         return f'<Channel id="{self.id}" name="{self.name}">'
 
-    def parseData(self):
+    def parse_data(self):
         """Fetch HTML source code and extract JSON data from it
 
         :return: Nothing, data have been set inside local variable
@@ -45,7 +45,7 @@ class Channel:
         if "404 Not Found" in response[0]:
             self._debug("ERROR", "Channel not exist")
             return
-        data, self._about_data = (getInitialData(i) for i in response)
+        data, self._about_data = (get_initial_data(i) for i in response)
         self._metadata = data["metadata"]["channelMetadataRenderer"]
         self._header_data = data["header"]
 
@@ -129,7 +129,7 @@ class Channel:
         :return: Number of subscriber of the channel
         :rtype: int or str or None
         """
-        try: subscriber_count = next(searchDict(self._header_data, "subscriberCountText"))["simpleText"].split()[0]
+        try: subscriber_count = next(search_dict(self._header_data, "subscriberCountText"))["simpleText"].split()[0]
         except: subscriber_count = "No"
         return int(subscriber_count) if subscriber_count.isdigit() else None if subscriber_count == "No" else subscriber_count
 
@@ -140,7 +140,7 @@ class Channel:
         :return: A list of banner urls
         :rtype: list or None
         """
-        try: return next(searchDict(self._header_data, "banner"))["thumbnails"]
+        try: return next(search_dict(self._header_data, "banner"))["thumbnails"]
         except: return None
 
     @custom_property
@@ -151,11 +151,11 @@ class Channel:
         :rtype: list or None
         """
         try:
-            raw_header_links = next(searchDict(self._header_data, "channelHeaderLinksRenderer")).values()
+            raw_header_links = next(search_dict(self._header_data, "channelHeaderLinksRenderer")).values()
             header_links = [{
                 "title": i["title"]["simpleText"],
                 "icon": i["icon"]["thumbnails"][0]["url"],
-                "url": revealRedirectUrl(i["navigationEndpoint"]["urlEndpoint"]["url"])
+                "url": reveal_redirect_url(i["navigationEndpoint"]["urlEndpoint"]["url"])
             } for i in sum(raw_header_links, [])]
             return header_links
         except:
@@ -169,7 +169,7 @@ class Channel:
         :rtype: bool
         """
         try:
-            if next(searchDict(self._header_data, "badges"))[0]["metadataBadgeRenderer"]["tooltip"] == "Verified":
+            if next(search_dict(self._header_data, "badges"))[0]["metadataBadgeRenderer"]["tooltip"] == "Verified":
                 return True
             return False
         except: return False
@@ -193,4 +193,3 @@ class Channel:
             'header_links': self.header_links,
             'is_verified': self.is_verified
         }
-        
