@@ -28,7 +28,7 @@ https://ytsa.thecodeblog.net
 - minor bug fixed on video download
 
 ### 1.0.0
-- Major code resturcturing
+- Major code refactoring
 - Channel feature completed
 - Query suggestions feature added
 - Docstring for every methods and classes added

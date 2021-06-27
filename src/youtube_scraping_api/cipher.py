@@ -103,4 +103,5 @@ class Cipher:
         for pattern, fn in mapper:
             if re.search(pattern, js_func):
                 return fn
+
         raise Exception
