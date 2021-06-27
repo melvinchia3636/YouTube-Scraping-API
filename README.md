@@ -2,10 +2,12 @@
 An easy-to-use YouTube API, without any kind of quota, and download any videos on youtube as much as you like. <br />
 I'm still working on it, so stay tuned for more updates to come.
 
+
 ## Documentation
 https://ytsa.thecodeblog.net
 
-## Version
+
+## Versions
 
 ### 0.0.1 (deleted)
 - Not an official release (careless bug found)
@@ -15,7 +17,6 @@ https://ytsa.thecodeblog.net
 
 ### 0.0.3/0.0.4/0.0.5
 - Updated README.md
-
 
 ### 0.1.0
 - Video caption feature added
