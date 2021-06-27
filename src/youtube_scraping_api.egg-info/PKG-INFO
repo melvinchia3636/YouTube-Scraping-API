@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: youtube-scraping-api
-Version: 1.1.1
+Version: 1.1.3
 Summary: A scraper for everything on YouTube
 Home-page: https://github.com/melvinchia3636/YouTube-Scraping-API
 Author: The Silly Coder
@@ -62,4 +62,13 @@ https://ytsa.thecodeblog.net
 
 ### 1.1.1
 - Version log updated
+
+### 1.1.2
+- Minor bug fixed
+- User can now parse raw metadata from channel object
+
+### 1.1.3
+- Minor bug fixed
+- Proxies added
+
 

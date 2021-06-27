@@ -25,6 +25,9 @@ class YoutubeAPI:
         self._debug_level = debug_level
         try: raw = self._session.get("https://www.youtube.com").text
         except: raise RuntimeError("Please check your internet connection")
+
+        if len(raw) < 10000: 
+            self._session.proxies = getProxy()
         
         self.DEBUG_LEVEL = dict([i[::-1] for i in enumerate(["INFO", "SUCCESS", "WARNING", "ERROR"])])
         self.API_TOKEN = findSnippet(raw, "innertubeApiKey", ",", (3, 1))

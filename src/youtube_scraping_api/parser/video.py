@@ -51,7 +51,8 @@ class Video():
             self._player_info = self._player_data["videoDetails"]
 
             self._has_generated = True
-        except StopIteration:
+            
+        except:
             self._session = requests.Session()
             self._session.headers = HEADERS
             time.sleep(3)
