@@ -1,4 +1,4 @@
-from ..utils import getThumbnail, searchDict
+from ..utils import get_thumbnail, search_dict
 from collections import Counter
 from .video import Video
 from .channel import Channel
@@ -72,7 +72,7 @@ class Shelf:
     def __init__(self, data):
         try: self.title = data["title"]["simpleText"]
         except: self.title = None
-        self.videos = cleanupData(next(searchDict(data, "items")))
+        self.videos = cleanupData(next(search_dict(data, "items")))
 
     def __repr__(self):
         return f'<Shelf title="{self.title}">'
@@ -87,7 +87,7 @@ class Shelf:
 
 class LiveStream:
     def __init__(self, data):
-            self.id = data["videoId"]
+            self.id = data["video_id"]
             self.title = "".join(i["text"] for i in data["title"]["runs"])
             self.description = "".join(i["text"] for i in data["descriptionSnippet"]["runs"]) if "descriptionSnippet" in data else None
             self.watching_count = int(data["viewCountText"]["runs"][0]["text"].replace(",", "")) if "viewCountText" in data else None
@@ -97,7 +97,7 @@ class LiveStream:
                 channel_id = data["ownerText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"],
             builtin_called = True
             )
-            self.thumbnail = getThumbnail(data["videoId"])
+            self.thumbnail = get_thumbnail(data["video_id"])
 
     def __repr__(self):
         return f'<LiveStream id="{self.id}" title="{self.title}">'
@@ -116,7 +116,7 @@ class LiveStream:
 
 class HorizontalCardList:
     def __init__(self, data):
-        title = next(searchDict(data["header"], "title"))
+        title = next(search_dict(data["header"], "title"))
         if "simpleText" in title: title = title["simpleText"]
         elif "runs" in title: title = "".join(i["text"] for i in title["runs"])
         else: title = None
@@ -136,7 +136,7 @@ class HorizontalCardList:
 class SearchRefinementCard:
     def __init__(self, data):
         self.query = "".join(i["text"] for i in data["query"]["runs"])
-        self.url = next(searchDict(data, "url"))
+        self.url = next(search_dict(data, "url"))
         self.thumbnail = data["thumbnail"]["thumbnails"]
 
     def __repr__(self):
@@ -202,7 +202,7 @@ class Advertisement:
         self.title = data["title"]["simpleText"]
         self.description = data["descriptionText"]["simpleText"]
         self.website = "".join(i["text"] for i in data["websiteText"]["runs"])
-        self.sitelinks = [SiteLinks("".join(i["text"] for i in i["title"]["runs"]), next(searchDict(i, 'url'))) for i in data["sitelinks"]] if 'sitelinks' in data else None
+        self.sitelinks = [SiteLinks("".join(i["text"] for i in i["title"]["runs"]), next(search_dict(i, 'url'))) for i in data["sitelinks"]] if 'sitelinks' in data else None
 
     def __repr__(self):
         return f'<Admertisement title="{self.title}">'
@@ -238,7 +238,7 @@ class Playlist:
 
 class PlaylistVideo:
     def __init__(self, data):
-        self.id = data["videoId"]
+        self.id = data["video_id"]
         self.title = data["title"]["simpleText"]
         self.length = data["lengthText"]["simpleText"]
 
@@ -261,7 +261,7 @@ class CarouselAd:
 class DidYouMean:
     def __init__(self, data):
         self.query = data["correctedQuery"]["runs"][0]["text"]
-        self.url = BASE_URL+next(searchDict(data, "url"))
+        self.url = BASE_URL+next(search_dict(data, "url"))
 
     def __repr__(self):
         return f'<DidYouMean query="{self.query}">'
@@ -276,8 +276,8 @@ class DidYouMean:
 class ShowingResultsFor:
     def __init__(self, data):
         self.query = data["correctedQuery"]["runs"][0]["text"]
-        self.url = BASE_URL+next(searchDict(data, "url"))
-        self.original_query = BASE_URL+next(searchDict(data["originalQueryEndpoint"], "url"))
+        self.url = BASE_URL+next(search_dict(data, "url"))
+        self.original_query = BASE_URL+next(search_dict(data["originalQueryEndpoint"], "url"))
 
     def __repr__(self):
         return f'<ShowingResultsFor query="{self.query}">'
@@ -291,7 +291,7 @@ class ShowingResultsFor:
 
 RENDERER_PARSER = {
     "videoRenderer": lambda x: Video(
-        x["videoId"], 
+        x["video_id"], 
         title="".join(i["text"] for i in x["title"]["runs"]),
         author=Channel(
             name = x["ownerText"]["runs"][0]["text"],
@@ -304,7 +304,7 @@ RENDERER_PARSER = {
     "radioRenderer": Mix,
     "shelfRenderer": Shelf,
     "liveStreamRenderer": lambda x: Video(
-        x["videoId"], 
+        x["video_id"], 
         title="".join(i["text"] for i in x["title"]["runs"]),
         author=Channel(
             name = x["ownerText"]["runs"][0]["text"],
@@ -337,7 +337,7 @@ RENDERER_PARSER = {
     "previewCardRenderer": None,
     "searchPyvRenderer": lambda x: cleanupData(x['ads'])[0],
     "promotedVideoRenderer": lambda x: Video(
-        x["videoId"], 
+        x["video_id"], 
         title = x["title"]["simpleText"],
         author = Channel(
             name = x["longBylineText"]["runs"][0]["text"],

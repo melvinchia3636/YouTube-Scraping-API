@@ -15,7 +15,7 @@ from typing import List, Dict, Any, Optional, Callable, Generator
 
 class Video():
     """Container for video data"""
-    def __init__(self, videoId: str, builtin_called: bool = False, **kwargs):
+    def __init__(self, video_id: str, builtin_called: bool = False, **kwargs):
         self._session = requests.Session()
         self._session.headers = HEADERS
         self._has_generated = False
@@ -28,60 +28,60 @@ class Video():
         self._player_info = None
         self._is_builtin_called = builtin_called
 
-        self.id = videoId
-        self.thumbnails = getThumbnail(self.id)
+        self.id = video_id
+        self.thumbnails = get_thumbnail(self.id)
 
         self._static_properties = kwargs
 
     def __repr__(self):
         return f'<Video id="{self.id}" title="{self.title}" author="{self.author.name}">'
 
-    def parseData(self) -> None:
+    def parse_data(self) -> None:
         """Fetch HTML source code and extract JSON data from it
-        
+
         :return: Nothing, data have been set inside local variable
         :rtype: None
         """
         try:
             self._raw = self._session.get(VIDEO_PLAYER_URL+self.id).text
-            self._player_data = getInitialPlayerResponse(self._raw)
-            self._init_data = getInitialData(self._raw)
-            self._primary_info = next(searchDict(self._init_data, "videoPrimaryInfoRenderer"))
-            self._secondary_info = next(searchDict(self._init_data, "videoSecondaryInfoRenderer"))
+            self._player_data = get_initial_player_response(self._raw)
+            self._init_data = get_initial_data(self._raw)
+            self._primary_info = next(search_dict(self._init_data, "videoPrimaryInfoRenderer"))
+            self._secondary_info = next(search_dict(self._init_data, "videoSecondaryInfoRenderer"))
             self._player_info = self._player_data["videoDetails"]
 
             self._has_generated = True
-            
+
         except:
             self._session = requests.Session()
             self._session.headers = HEADERS
             time.sleep(3)
-            self.parseData()
+            self.parse_data()
 
-    def getSignatureUrl(self, url: str) -> str:
+    def get_signature_url(self, url: str) -> str:
         """Get decrypted download link for the video
-        
+
         :param url: Encrypted download link of the video
         :type url: str
         :return: Usable download link of video
         :rtype: str
         :note: This function isn't developed by me since I have no enough time to dive so deep into Javascript. Credit to PyTube.
         """
-        base_url = findSnippet(self._raw, "jsUrl", ",", (3, 1))
+        base_url = find_snippet(self._raw, "jsUrl", ",", (3, 1))
         js_url = BASE_URL+base_url
         js_content = self._session.get(js_url).text
         cipher = Cipher(js_content)
         s, sp, url = [i[0] for i in parse_qs(url).values()]
         return url + "&sig=" + cipher.get_signature(s)
-    
-    def getCommentCount(self) -> int:
+
+    def get_comment_count(self) -> int:
         """Fetch the amount of comments of the video
 
         :return: Number of comments
         :rtype: int
         """
-        continuation = next(searchDict(self._init_data, 'nextContinuationData'))['continuation'].replace('%3D', '=')
-        xsrf_token = findSnippet(self._raw, 'XSRF_TOKEN', ",", (3, 1)).replace(r'\u003d', '\u003d')
+        continuation = next(search_dict(self._init_data, 'nextContinuationData'))['continuation'].replace('%3D', '=')
+        xsrf_token = find_snippet(self._raw, 'XSRF_TOKEN', ",", (3, 1)).replace(r'\u003d', '\u003d')
         params = {
             'action_get_comments': 1,
             'pbj': 1,
@@ -90,7 +90,7 @@ class Video():
             'type': 'next'
         }
         data = self._session.post(COMMENT_AJAX_URL, data={'session_token': xsrf_token}, params=params).json()
-        comment_count = int(next(searchDict(data, 'countText'))['runs'][0]['text'].replace(',', ''))
+        comment_count = int(next(search_dict(data, 'countText'))['runs'][0]['text'].replace(',', ''))
         return comment_count
 
     @custom_property
@@ -105,7 +105,7 @@ class Video():
     @custom_property
     def type(self) -> str:
         """Determine type of video
-        
+
         :return: Video type
         :rtype: str
         """
@@ -121,9 +121,9 @@ class Video():
         if not "superTitleLink" in self._primary_info: return None
         supertitle = [{
             'text': i['text'].strip(),
-            'url': next(searchDict(i, 'url'))
-        } for i in self._primary_info["superTitleLink"]["runs"] if i['text'].strip()] 
-        return supertitle 
+            'url': next(search_dict(i, 'url'))
+        } for i in self._primary_info["superTitleLink"]["runs"] if i['text'].strip()]
+        return supertitle
 
     @custom_property
     def description(self) -> Optional[str]:
@@ -137,7 +137,7 @@ class Video():
     @custom_property
     def tags(self) -> List[str]:
         """Extract descriptive keywords which content creators can add to thier video to help viewers find their content
-        
+
         :return: List of all tags of video
         :rtype: list
         """
@@ -146,17 +146,17 @@ class Video():
     @custom_property
     def publish_time(self) -> str:
         """Extract the time when the video is published
-        
+
         :return: Time when video is published
         :rtype: str
         :todo: Convert output string to datetime object
         """
         return self._primary_info["dateText"]["simpleText"]
-    
+
     @custom_property
     def author(self) -> Channel:
         """Extract the content creator who upload the video
-        
+
         :return: Video author
         :rtype: Channel
         """
@@ -202,7 +202,7 @@ class Video():
             "statistics": {
                 "view_count": int(player_info["viewCount"]),
                 **dict(zip(["like_count", "unlike_count"], map(lambda i: int(i.replace(",", "")), primary_info["sentimentBar"]["sentimentBarRenderer"]["tooltip"].split(" / ")))),
-                "comment_count": self.getCommentCount()
+                "comment_count": self.get_comment_count()
             }
         }
         return cleaned_data
@@ -214,7 +214,7 @@ class Video():
         :return: List of dictionary containing download links and metadata
         :rtype: list
         """
-        if not self._player_data: self.parseData()
+        if not self._player_data: self.parse_data()
         try:
             return dict([(i["itag"], {
                 "url": i["url"] if "url" in i else None,
@@ -229,9 +229,10 @@ class Video():
                 "quality_label": i["qualityLabel"] if "qualityLabel" in i else None,
                 "duration": i["approxDurationMs"] if "approxDurationMs" in i else None
             }) for i in self._player_data["streamingData"]["formats"]+self._player_data["streamingData"]["adaptiveFormats"]]) if self.type!="livestream" else None
-        except: pass
+        except:
+            pass
 
-    def getFileSize(self, url: str) -> int:
+    def get_file_size(self, url: str) -> int:
         """Get the size of video stream
 
         :param url: Download link of the video
@@ -253,7 +254,8 @@ class Video():
         :return: video stream chunk
         :rtype: bytes
         """
-        file_size: int = self.getFileSize(url)
+        file_size: int = self.get_file_size(url)
+
         downloaded = 0
         while downloaded < file_size:
             stop_pos = min(downloaded + range_size, file_size) - 1
@@ -267,7 +269,7 @@ class Video():
 
     def download(self, itag: int = None, path: str = ".", log_progress: bool = True, chunk_size: int = 4096, callback_func: Optional[Callable[[Any], None]] = None, name: Optional[str] = None) -> None:
         """Download video from YouTube into local storage
-        
+
         :param itag: Itag of the video to download, video with best quality will be downloaded if set to None, default set to None
         :type itag: int, optional
         :param path: Relative or absolute path to save the video
@@ -283,19 +285,30 @@ class Video():
         :return: None, just download the video and save it
         :rtype: None
         """
-        if not self.download_data: return None
-        if itag:
-            if itag in self.download_data.keys(): target = self.download_data[itag]
-            else: raise RuntimeError('Itag not exist!')
-        else: target = list(self.download_data.values())[0]
+        if not self.download_data:
+            return None
 
-        if target['url'] != None: target_url = target['url']
-        elif target["signature_cipher"]: 
-            target_url = self.getSignatureUrl(target["signature_cipher"])
-        vid_name = name if name else convertValidFilename(self.title)
+        if itag:
+            if itag in self.download_data.keys():
+                target = self.download_data[itag]
+            else:
+                raise RuntimeError('Itag does not exist!')
+        else:
+            target = list(self.download_data.values())[0]
+
+        if target['url'] != None:
+            target_url = target['url']
+        elif target["signature_cipher"]:
+            target_url = self.get_signature_url(target["signature_cipher"])
+
+        vid_name = name if name else convert_valid_filename(self.title)
         extension = target["mime_type"].split(";")[0].split("/")[-1]
-        print(self.title)
-        if log_progress: progress_bar = tqdm(total=self.getFileSize(target_url), unit='iB', unit_scale=True)
+
+
+        if log_progress:
+            print(self.title)
+            progress_bar = tqdm(total=self.get_file_size(target_url), unit='iB', unit_scale=True)
+
         with open(os.path.join(path, f"{vid_name}.{extension}"), "wb") as f:
             for chunk in self.stream(target_url, chunk_size=chunk_size):
                 if log_progress: progress_bar.update(len(chunk))
@@ -308,11 +321,15 @@ class Video():
         :return: List of available captions
         :rtype: CaptionQuery
         """
-        if not self._player_data: self.parseData()
-        if not "captions" in self._player_data: return None
+        if not self._player_data:
+            self.parse_data()
+
+        if not "captions" in self._player_data:
+            return None
         raw = self._player_data["captions"]["playerCaptionsTracklistRenderer"]
         default_raw = raw["audioTracks"][0]
         default = default_raw["defaultCaptionTrackIndex"] if "defaultCaptionTrackIndex" in default_raw else 0
         caption_list = raw["captionTracks"]
         result = CaptionQuery((Caption(i["languageCode"], i["name"]["simpleText"], i["baseUrl"], i["isTranslatable"], raw["translationLanguages"]) for i in caption_list), default)
+
         return result

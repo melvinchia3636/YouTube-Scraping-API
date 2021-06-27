@@ -50,4 +50,4 @@ https://ytsa.thecodeblog.net
 - Proxies added
 
 ### 1.1.4
-- `getAllFilters` function added
+- `get_all_filters` function added
