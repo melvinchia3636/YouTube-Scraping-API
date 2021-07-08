@@ -242,7 +242,7 @@ class Video():
         """
         return int(self._session.get(url, stream=True).headers.get('content-length', 0))
 
-    def stream(self, url, chunk_size: int = 4096, range_size: int = 9437184) -> Generator:
+    def stream(self, url, chunk_size: int = 8192, range_size: int = 10000000000) -> Generator:
         """Request and yield chunks of video stream
 
         :param url: Download link of video stream

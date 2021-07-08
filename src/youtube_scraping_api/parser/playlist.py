@@ -27,7 +27,7 @@ class Playlist(list):
         data = cleanupData(next(search_dict(response,"itemSectionRenderer"))["contents"])
         super(Playlist, self).__init__(data)
 
-    def _parse_data(self):
+    def parse_data(self):
         pass
 
     @custom_property
@@ -103,9 +103,9 @@ class PlaylistVideo(Video):
         :rtype: int
         """
         super().__init__(
-            data["video_id"],
+            data["videoId"],
             length = data["lengthText"]["simpleText"] if "lengthText" in data else None,
-            thumbnails = get_thumbnail(data["video_id"]),
+            thumbnails = get_thumbnail(data["videoId"]),
             builtin_called = True
         )
     
