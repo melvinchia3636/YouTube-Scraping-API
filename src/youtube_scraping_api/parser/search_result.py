@@ -87,7 +87,7 @@ class Shelf:
 
 class LiveStream:
     def __init__(self, data):
-            self.id = data["video_id"]
+            self.id = data["videoId"]
             self.title = "".join(i["text"] for i in data["title"]["runs"])
             self.description = "".join(i["text"] for i in data["descriptionSnippet"]["runs"]) if "descriptionSnippet" in data else None
             self.watching_count = int(data["viewCountText"]["runs"][0]["text"].replace(",", "")) if "viewCountText" in data else None
@@ -97,7 +97,7 @@ class LiveStream:
                 channel_id = data["ownerText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"],
             builtin_called = True
             )
-            self.thumbnail = get_thumbnail(data["video_id"])
+            self.thumbnail = get_thumbnail(data["videoId"])
 
     def __repr__(self):
         return f'<LiveStream id="{self.id}" title="{self.title}">'
@@ -106,7 +106,7 @@ class LiveStream:
     def raw(self):
         return {
             "type": "live_stream",
-            "video_id": self.id,
+            "videoId": self.id,
             "title": self.title,
             "description": self.description,
             "watching_count": self.watching_count,
@@ -249,7 +249,7 @@ class PlaylistVideo:
     def raw(self):
         return {
             "type": "playlist_video",
-            "video_id": self.id,
+            "videoId": self.id,
             "title": self.title,
             "length": self.length
         }
@@ -304,7 +304,7 @@ RENDERER_PARSER = {
     "radioRenderer": Mix,
     "shelfRenderer": Shelf,
     "liveStreamRenderer": lambda x: Video(
-        x["video_id"], 
+        x["videoId"], 
         title="".join(i["text"] for i in x["title"]["runs"]),
         author=Channel(
             name = x["ownerText"]["runs"][0]["text"],
@@ -337,7 +337,7 @@ RENDERER_PARSER = {
     "previewCardRenderer": None,
     "searchPyvRenderer": lambda x: cleanupData(x['ads'])[0],
     "promotedVideoRenderer": lambda x: Video(
-        x["video_id"], 
+        x["videoId"], 
         title = x["title"]["simpleText"],
         author = Channel(
             name = x["longBylineText"]["runs"][0]["text"],

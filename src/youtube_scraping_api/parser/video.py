@@ -15,7 +15,7 @@ from typing import List, Dict, Any, Optional, Callable, Generator
 
 class Video():
     """Container for video data"""
-    def __init__(self, video_id: str, builtin_called: bool = False, **kwargs):
+    def __init__(self, videoId: str, builtin_called: bool = False, **kwargs):
         self._session = requests.Session()
         self._session.headers = HEADERS
         self._has_generated = False
@@ -28,7 +28,7 @@ class Video():
         self._player_info = None
         self._is_builtin_called = builtin_called
 
-        self.id = video_id
+        self.id = videoId
         self.thumbnails = get_thumbnail(self.id)
 
         self._static_properties = kwargs
@@ -189,7 +189,7 @@ class Video():
         primary_info = self._primary_info
         player_info = self._player_info
         cleaned_data = {
-            "video_id": self.id,
+            "videoId": self.id,
             "type": self.type,
             "title": self.title,
             "supertitle": self.supertitle,

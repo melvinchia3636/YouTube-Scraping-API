@@ -99,16 +99,16 @@ def reveal_redirect_url(url):
     """
     return bs(requests.get(url, headers=HEADERS).content, "lxml").find("div", {"id": "redirect-action-container"}).find("a")["href"]
 
-def get_thumbnail(video_id):
+def get_thumbnail(videoId):
     """Get url for thumbnails of video
 
-    :param video_id: Youtube ID of the video
-    :type video_id: str
+    :param videoId: Youtube ID of the video
+    :type videoId: str
     :return: A dictionary of thumbnail urls
     :rtype: dict
     :todo: Check thumbnail urls availability
     """
-    return dict(map(lambda i: (i[0], i[1].format(video_id)), THUMBNAIL_TEMPLATE.items()))
+    return dict(map(lambda i: (i[0], i[1].format(videoId)), THUMBNAIL_TEMPLATE.items()))
 
 def get_proxy():
     proxies = requests.get('https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=4550&country=all&ssl=all&anonymity=all&simplified=true').text.split('\r\n')

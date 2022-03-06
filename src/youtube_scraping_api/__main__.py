@@ -123,16 +123,16 @@ class YoutubeAPI:
         result = Channel(channel_id=channel_id, username=username)
         return result
 
-    def video(self, video_id: str) -> Video:
+    def video(self, videoId: str) -> Video:
         """Parse video metadata, captions, download link, etc.
 
-        :param video_id:
+        :param videoId:
             ID of Youtube video
-        :type video_id: str
+        :type videoId: str
         :return: Video object
         :rtype: Video
         """
-        return Video(video_id)
+        return Video(videoId)
 
     def query_suggestions(self, query=None, language='en', country='gb'):
         """Return a list of query suggestions for given query string

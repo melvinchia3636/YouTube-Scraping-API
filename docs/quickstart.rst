@@ -51,8 +51,8 @@ Here come the most important part of this API - The Ultimate Video Object. With 
 
 .. code-block:: python
 
-	>>> video_id = 'WzxSiEWK3cg'
-	>>> api.video(video_id)
+	>>> videoId = 'WzxSiEWK3cg'
+	>>> api.video(videoId)
 	<Video id="WzxSiEWK3cg" title="PARIS | A380 LANDING 4K EXTENDED" author="High Pressure Aviation Films">
 
 There you go! You've just created a video Object with contains everything about the video. Suppose you have a video object with the name ``video`` on hand right now, let's see some examples of how we can use it:
