@@ -13,23 +13,18 @@ import requests
 
 class YoutubeAPI:
     """Core developer interface for Youtube Scraping API
-
-    :param debug_level: Which level must be reached in order to print out log messages
-    :type debug_level: str, optional
     """
     _data = PAYLOAD
 
-    def __init__(self, debug_level="ERROR"):
+    def __init__(self):
         self._session = requests.Session()
         self._session.headers = HEADERS
-        self._debug_level = debug_level
         try: raw = self._session.get("https://www.youtube.com").text
         except: raise RuntimeError("Please check your internet connection")
 
         if len(raw) < 10000: 
             self._session.proxies = get_proxy()
         
-        self.DEBUG_LEVEL = dict([i[::-1] for i in enumerate(["INFO", "SUCCESS", "WARNING", "ERROR"])])
         self.API_TOKEN = find_snippet(raw, "innertubeApiKey", ",", (3, 1))
 
     def search(self, query=None, continuation_token=None, raw=False, filter=None):
