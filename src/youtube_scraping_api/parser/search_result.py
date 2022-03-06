@@ -238,7 +238,7 @@ class Playlist:
 
 class PlaylistVideo:
     def __init__(self, data):
-        self.id = data["video_id"]
+        self.id = data["videoId"]
         self.title = data["title"]["simpleText"]
         self.length = data["lengthText"]["simpleText"]
 
@@ -291,7 +291,7 @@ class ShowingResultsFor:
 
 RENDERER_PARSER = {
     "videoRenderer": lambda x: Video(
-        x["video_id"], 
+        x["videoId"], 
         title="".join(i["text"] for i in x["title"]["runs"]),
         author=Channel(
             name = x["ownerText"]["runs"][0]["text"],
