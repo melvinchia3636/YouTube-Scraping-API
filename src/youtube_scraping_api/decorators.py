@@ -1,5 +1,3 @@
-import inspect
-
 def custom_property(f):
     def wrapper(self, *args, **kwargs):
         if self._is_builtin_called and f.__name__ in self._static_properties:
