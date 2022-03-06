@@ -18,4 +18,4 @@ print(api.search("space", filter=SearchFilter(features=["360°"]))[0])
 print(api.search("hermitcraft", filter=SearchFilter(upload_date="Today"))[0])
 
 #playlist test
-print(api.playlist("PLU2851hDb3SE6S9YJFY6n1B4t_Qv26f1m"))
+print([i.thumbnail for i in api.playlist("PLU2851hDb3SE6S9YJFY6n1B4t_Qv26f1m")])

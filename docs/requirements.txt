@@ -1,4 +1,4 @@
-sphinxawesome_theme
+furo
 requests
 bs4
 tqdm

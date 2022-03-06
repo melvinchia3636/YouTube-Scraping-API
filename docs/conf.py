@@ -58,8 +58,6 @@ autosummary_generate = True
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 html_static_path = ['_static']
-html_css_files = ["mod.css"]
-html_js_files = ['jquery.visible.min.js', 'smooth-scrollbar.js']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -72,7 +70,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinxawesome_theme"
+html_theme = "furo"
 html_domain_indices = True
 html_favicon = '_static/favicon.ico'
 
