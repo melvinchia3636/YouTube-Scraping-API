@@ -301,6 +301,8 @@ class Video():
         elif target["signature_cipher"]:
             target_url = self.get_signature_url(target["signature_cipher"])
 
+        print(target_url)
+
         vid_name = name if name else convert_valid_filename(self.title)
         extension = target["mime_type"].split(";")[0].split("/")[-1]
 
